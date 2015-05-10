@@ -2,7 +2,7 @@
 
 Template.header.rendered = function() {
 $('.ui.sidebar')
-        .sidebar('attach events', '.launch.button', 'slide out');
+        .sidebar('attach events', '.menu .item', 'slide out');
 }
 
 Template.header.helpers({
