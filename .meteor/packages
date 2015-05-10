@@ -8,3 +8,8 @@ iron:router
 accounts-base
 accounts-password
 accounts-ui
+meteorhacks:npm
+
+
+npm-container
+semantic:ui-css

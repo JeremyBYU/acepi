@@ -1,5 +1,13 @@
 <template name="layout">
-  {{> header}}
-  {{> yield}}
-  {{> footer}}
+
+   {{> header}}
+
+  <div class="pusher">
+  	<div class="ui segment" style="padding-top: 45px;">
+  		{{> yield}}
+      {{> footer}}  
+    </div>        
+  </div>
+
+ 
 </template>

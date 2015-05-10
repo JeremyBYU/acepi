@@ -65,6 +65,11 @@ Router.map(function() {
       }
     }
   });
+  //main ace template
+  this.route('ace', {
+    path: 'ace',
+    
+  });
 
 
   // Pages

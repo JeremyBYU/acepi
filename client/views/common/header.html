@@ -1,23 +1,20 @@
 <template name="header">
-  <div class="header">
-    <h1>Void</h1>
-    <ul>
-      <li><a href="{{pathFor 'homepage'}}">Homepage</a></li>
-      <li><a href="{{pathFor 'content'}}">Content page</a></li>
-      <li><a href="{{pathFor 'items'}}">Items</a></li>
-      <li><a href="/404">404 Link</a></li>
-      {{#if isLoggedIn}}
-        <li><a href="/" class="log-out">Log Out</a></li>
-      {{else}} 
-        <li><a href="{{pathFor 'signup'}}">Sign Up</a></li>
-        <li><a href="{{pathFor 'login'}}">Log In</a></li>   
-      {{/if}}
-    </ul>
-  </div>
-  <hr/>
-  <div class="messages">
-    {{#each messages}}
-      <p class="message message-{{type}}">{{message}}</p>
-    {{/each}}
-  </div>
+    <div class="ui vertical sidebar menu">
+        <a href="{{pathFor 'homepage'}}" class='item'>Homepage</a>
+        <a href="{{pathFor 'content'}}" class='item'>Content page</a>
+        <a href="{{pathFor 'items'}}" class='item'>Items</a>
+        <a href="/404" class='item'>404 Link</a> {{#if isLoggedIn}}
+        <a href="/" class="item log-out">Log Out</a> {{else}}
+        <a href="{{pathFor 'signup'}}" class='item'>Sign Up</a>
+        <a href="{{pathFor 'login'}}" class='item'>Log In</a> {{/if}}
+    </div>
+    <div class="ui top fixed menu">
+        <div class="ui title borderless item launch button">Menu</div>
+    </div>
+    <!--     <hr/>
+    <div class="messages">
+        {{#each messages}}
+        <p class="message message-{{type}}">{{message}}</p>
+        {{/each}}
+    </div> -->
 </template>
