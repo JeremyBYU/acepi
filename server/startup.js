@@ -1,4 +1,10 @@
 master = {}; //placeholder for master connection, can be serial or tcp/ip
+
+test = function(blah){
+    console.log(blah);
+
+
+};
 Meteor.startup(function() {
 
     modbus = Meteor.npmRequire('h5.modbus');
@@ -27,7 +33,8 @@ Meteor.startup(function() {
             defaultTimeout: connection.options.defaultTimeout
         });
 
-    } else {
+    } 
+    else {
         var net = Meteor.npmRequire('net');
         var socket = new net.Socket();
 
@@ -58,6 +65,8 @@ Meteor.startup(function() {
 
 
     }
+
+
     //TODO test connection
     //TODO If connection successful begin polling from tag configuration
     //TODO create Tag Configuration
