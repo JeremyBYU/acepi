@@ -1,8 +1,18 @@
 <template name="ace">
-  <h2>Example of Ace Modbus Communications</h2>
-  <p>This will demonstrate several modbus communications with the Ace PLC through the raspberry Pi webserver. </p>
-  <div class="ui checkbox">
-    <input type="checkbox" name="public">
-    <label>Toggle Coil #1</label>
-  </div>
+    <h2>Example of Ace Modbus Communications</h2>
+    <p>This will demonstrate several modbus communications with the Ace PLC through the raspberry Pi webserver. </p>
+    <div class='ui form'>
+        <div class='field'>
+            <div class="ui toggle checkbox">
+                <input type="checkbox" name="coil1" id='coil1'>
+                <label>Toggle Coil #1</label>
+            </div>
+        </div>
+        <div>
+            <div class="ui toggle checkbox">
+                <input type="checkbox" name="coil2" id='coil2'>
+                <label>Toggle Coil #2</label>
+            </div>
+        </div>
+    </div>
 </template>
