@@ -35,15 +35,7 @@ if (Meteor.isServer) {
             } else {
                 throw new Meteor.Error(403, 'You do not have the rights to delete this item.')
             }
-        },
-        writeCoils: function(address, states) {
-            if (can.createItem(Meteor.user())) {
-              writeServerCoils(address,states);
-              //test('blah');
-
-            }
-
-        }
+        }        
     });
 
 

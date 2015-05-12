@@ -1,10 +1,6 @@
 master = {}; //placeholder for master connection, can be serial or tcp/ip
 
-test = function(blah){
-    console.log(blah);
 
-
-};
 Meteor.startup(function() {
 
     modbus = Meteor.npmRequire('h5.modbus');
