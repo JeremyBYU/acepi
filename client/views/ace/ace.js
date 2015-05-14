@@ -17,11 +17,11 @@ Template.ace.events({
             states = [false];
         }
         if (event.target.name == 'coil1') {
-            Meteor.call('writeCoils', 0x0000, states);
+            Meteor.call('writeCoils', 0, states);
 
         } else {
 
-            Meteor.call('writeCoils', 0x0001, states);
+            Meteor.call('writeCoils', 1, states);
         }
         //Session.set("hideCompleted", event.target.checked);
     }

@@ -17,3 +17,13 @@ Meteor.publish('allItems', function() {
 Meteor.publish('singleItem', function(id) {
   return Items.find(id);
 });
+
+// Publish all Tags
+Meteor.publish('allTags', function() {
+  return Tags.find();
+});
+
+// Publish a single Tag
+Meteor.publish('singleTag', function(id) {
+  return Tags.find(id);
+});

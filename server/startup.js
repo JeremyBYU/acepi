@@ -29,8 +29,7 @@ Meteor.startup(function() {
             defaultTimeout: connection.options.defaultTimeout
         });
 
-    } 
-    else {
+    } else {
         var net = Meteor.npmRequire('net');
         var socket = new net.Socket();
 
@@ -60,9 +59,27 @@ Meteor.startup(function() {
         });
 
 
+
     }
 
+    //MONGODB Database for current connections
+    //TO DO ERROR HANDLING
+    master.on('error', function(err) {
+        console.error('[master#error] %s', err.message);
+    });
+    master.on('disconnected', function() {
+        console.log('[master#disconnected]');
+    });
+    master.on('connected', function() {
+        console.log('[master#connected]');
+    });
 
+
+    /*var connection = master.getConnection();
+
+    connection.on('open', function() {
+        console.log('[connection#open]');
+    });*/
     //TODO test connection
     //TODO If connection successful begin polling from tag configuration
     //TODO create Tag Configuration

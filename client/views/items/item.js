@@ -28,6 +28,7 @@ Template.item.events({
     var item = this;
     e.preventDefault();
     Meteor.call('removeItem', item, function(error, result){
+      console.log(error);
       alert('Item deleted.');
       Router.go('/items');
     });

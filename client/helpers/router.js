@@ -9,83 +9,94 @@ Client-side Router.
 // Config
 
 Router.configure({
-  layoutTemplate: 'layout',
-  loadingTemplate: 'loading',
-  notFoundTemplate: 'notFound',
+    layoutTemplate: 'layout',
+    loadingTemplate: 'loading',
+    notFoundTemplate: 'notFound',
 });
 
 // Filters
 
 var filters = {
 
-  myFilter: function () {
-    // do something
-  },
+    myFilter: function() {
+        // do something
+    },
 
-  isLoggedIn: function() {
-    if (!(Meteor.loggingIn() || Meteor.user())) {
-      alert('Please Log In First.')
-      this.stop();
+    isLoggedIn: function() {
+        if (!(Meteor.loggingIn() || Meteor.user())) {
+            alert('Please Log In First.')
+            this.stop();
+        } else {
+            this.next();
+        }
     }
-    else
-    {
-      this.next();
-    }
-  }
 
 }
 
-Router.onBeforeAction(filters.isLoggedIn, {only: ['items']});
+Router.onBeforeAction(filters.isLoggedIn, {
+    only: ['items']
+});
 
 // Routes
 
 Router.map(function() {
 
-  // Items
+    // Items
 
-  this.route('items', {
-    waitOn: function () {
-      return Meteor.subscribe('allItems');
-    },
-    data: function () {
-      return {
-        items: Items.find()
-      }
-    }
-  });
+    this.route('items', {
+        waitOn: function() {
+            return Meteor.subscribe('allItems');
+        },
+        data: function() {
+            return {
+                items: Items.find()
+            }
+        }
+    });
 
-  this.route('item', {
-    path: '/items/:_id',
-    waitOn: function () {
-      return Meteor.subscribe('singleItem', this.params._id);
-    },
-    data: function () {
-      return {
-        item: Items.findOne(this.params._id)
-      }
-    }
-  });
-  //main ace template
-  this.route('ace', {
-    path: 'ace',
-    
-  });
+    this.route('item', {
+        path: '/items/:_id',
+        waitOn: function() {
+            return Meteor.subscribe('singleItem', this.params._id);
+        },
+        data: function() {
+            return {
+                item: Items.findOne(this.params._id)
+            }
+        }
+    });
+    //main ace template
+    this.route('ace', {
+        path: 'ace',
 
+    });
+    this.route('tags', {
+        path: 'tags',
+        waitOn: function() {
+            return Meteor.subscribe('allItems');
+        },
+        data: function() {
+            return {
+                items: Items.find()
+            }
+        }
 
-  // Pages
+    });
 
-  this.route('homepage', {
-    path: '/'
-  });
+    // Pages
 
-  this.route('content');
+    this.route('homepage', {
+        path: '/'
+    });
 
-  // Users
+    this.route('content');
 
-  this.route('login');
+    // Users
 
-  this.route('signup');
+    this.route('login');
 
-  this.route('forgot');
+    this.route('signup');
+
+    this.route('forgot');
 
 });
