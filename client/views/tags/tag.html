@@ -1,0 +1,10 @@
+<template name="tag">
+<ul>
+       {{#each tags}}
+        <li>{{tag}}</li>
+        {{/each}}
+</ul>
+
+<!-- SAME DATA CONTEXT, THIS IS THE PROBLEM -->
+<!--     {{> quickForm collection="Tags" doc=this id="updateTagForm" type="update"}} -->
+</template>

@@ -73,14 +73,23 @@ Router.map(function() {
 
     //Tags - Used for configuration for Modbus Tags
     this.route('tags', {
-        path: 'tags/',
+        path: 'tags/:_id',
+        template: 'tags',
+        layoutTemplate: 'tagsLayout',
+        yieldTemplates:{
+            'tag': {to: 'tag'}
+
+        },
         waitOn: function() {
-            return Meteor.subscribe('allTags');
+            return [Meteor.subscribe('allTags'),
+                    Meteor.subscribe('singleTag',this.params._id)];
+
         },
         data: function() {
             return {
-                tags: Tags.find()
-            }
+                tags: Tags.find(),
+                tag: Tags.findOne(this.params._id)
+            };
         }
 
     });

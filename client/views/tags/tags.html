@@ -1,18 +1,12 @@
 <template name="tags">
-    <div class="ui stackable two column grid">
-        <div class="left aligned five wide column">
-            <h2>Tag Configuration.</h2>
-            <ul>
-                {{#each tags}}
-                <li>{{description}}</li>
-                {{/each}}
-            </ul>
-            <!--  {{#each items}}
+    <h2>Tag Configuration.</h2>
+    <ul>
+        {{#each tags}}
+        <li>{{tag}}</li>
+        {{/each}}
+    </ul>
+    <!--  {{#each items}}
       <li><a href="{{pathFor "item"}}">{{title}}</a></li>
     {{/each}} -->
-        </div>
-        <div class="ten wide column">
-            {{> quickForm collection="Tags" id="insertTagsForm" type="insert"}}
-        </div>
-    </div>
+
 </template>

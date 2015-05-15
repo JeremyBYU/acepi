@@ -1,0 +1,17 @@
+<template name="tagsLayout">
+    {{> header}}
+    <div class="pusher">
+        <div class="ui segment" style="padding-top: 45px;">
+            <div class="ui stackable two column grid">
+                <div class="left aligned five wide column">
+                	 {{> yield}}
+                   
+                </div>
+                <div class="ten wide column">
+                	{{> yield region='tag'}}
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
