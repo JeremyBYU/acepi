@@ -23,6 +23,6 @@ writeServerCoils = function(coil_address, states) {
 
         }
     });
-    console.log(t2);
+    //console.log(t2);
 };
 

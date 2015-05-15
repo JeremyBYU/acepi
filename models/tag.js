@@ -18,7 +18,7 @@ param3_address - (number)
 
 
 */
-Tags = new Mongo.Collection("tags");
+Tags = new Meteor.Collection("tags");
 
 
 Tags.allow({

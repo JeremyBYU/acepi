@@ -1,4 +1,4 @@
-x = 1;
+
 Template.ace.rendered = function() {
     $('.ui.checkbox')
         .checkbox();

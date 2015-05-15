@@ -70,14 +70,16 @@ Router.map(function() {
         path: 'ace',
 
     });
+
+    //Tags - Used for configuration for Modbus Tags
     this.route('tags', {
-        path: 'tags',
+        path: 'tags/',
         waitOn: function() {
-            return Meteor.subscribe('allItems');
+            return Meteor.subscribe('allTags');
         },
         data: function() {
             return {
-                items: Items.find()
+                tags: Tags.find()
             }
         }
 
