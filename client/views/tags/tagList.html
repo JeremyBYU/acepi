@@ -2,6 +2,44 @@
     <div class="ui stackable two column grid">
         <div class="left aligned five wide column">
             <h2>Tag Configuration.</h2>
+            <table class="ui sortable celled defenition table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Tag</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each tags}}
+                    <tr>
+                        <td class="collapsing">
+                            <div class="ui fitted slider checkbox">
+                                <input type="checkbox" name="{{tag}}">
+                                <label></label>
+                            </div>
+                        </td>
+                        <td>{{tag}}</td>
+                        <td>{{description}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                <tfoot class="full-width">
+                    <tr>
+                        <th>
+                        	<div class="ui small  button">
+                                Delete
+                            </div>
+                        </th>
+                        <th colspan="3">
+                            <div class="ui right floated small primary labeled  button">
+                                 Edit Tag
+                            </div>
+                            
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
             <ul>
                 {{#each tags}}
                 <li>{{tag}}</li>
@@ -9,8 +47,6 @@
             </ul>
         </div>
         <div class="ten wide column">
-            {{selectedTag}}
-
             <!-- SAME DATA CONTEXT, THIS IS THE PROBLEM -->
             {{> quickForm collection="Tags" doc=selectedTag id="updateTagForm" type="update"}}
         </div>
