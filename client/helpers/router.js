@@ -57,7 +57,7 @@ Router.map(function() {
     this.route('item', {
         path: '/items/:_id',
         waitOn: function() {
-            return Meteor.subscribe('sirngleItem', this.params._id);
+            return Meteor.subscribe('singleItem', this.params._id);
         },
         data: function() {
             return {
@@ -110,7 +110,7 @@ Router.map(function() {
       });*/
 
     this.route('tags', {
-        path: 'tags/',
+        path: 'tags',
         template: 'tagList',        
         waitOn: function() {
             return Meteor.subscribe('allTags');
@@ -125,7 +125,11 @@ Router.map(function() {
             //console.log(temp.tag);
 
         },
-        notFoundTemplate: 'notFound'
+        onBeforeAction: function () {
+            Session.setDefault('selectedTag', {_id:'NaN'});
+            this.next();
+        }
+       
 
     });
 

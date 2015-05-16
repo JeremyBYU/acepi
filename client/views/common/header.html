@@ -2,12 +2,16 @@
     <div class="ui vertical sidebar menu">
         <a href="{{pathFor 'homepage'}}" class='item'>Homepage</a>
         <a href="{{pathFor 'ace'}}" class='item'>Ace Control</a>
+        <a href="{{pathFor 'tags'}}" class='item'>Tag Configuration</a> 
         <a href="{{pathFor 'content'}}" class='item'>Content page</a>
         <a href="{{pathFor 'items'}}" class='item'>Items</a>
-        <a href="/404" class='item'>404 Link</a> {{#if isLoggedIn}}
-        <a href="/" class="item log-out">Log Out</a> {{else}}
+        <a href="/404" class='item'>404 Link</a>
+         {{#if isLoggedIn}}
+        <a href="/" class="item log-out">Log Out</a> 
+        {{else}}
         <a href="{{pathFor 'signup'}}" class='item'>Sign Up</a>
-        <a href="{{pathFor 'login'}}" class='item'>Log In</a> {{/if}}
+        <a href="{{pathFor 'login'}}" class='item'>Log In</a> 
+        {{/if}}
     </div>
     <div class="ui top fixed menu">
         <div class="ui title borderless item launch button"><i class="sidebar icon"></i>Menu</div>
