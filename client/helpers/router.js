@@ -111,29 +111,51 @@ Router.map(function() {
 
     this.route('tags', {
         path: 'tags',
-        template: 'tagList',        
+        template: 'tagList',
         waitOn: function() {
             return Meteor.subscribe('allTags');
         },
         data: function() {
-            //console.log(this.params._id);
 
-
-           return { tags: Tags.find()};
-
-            //console.log(temp.tags);
-            //console.log(temp.tag);
+            return {
+                tags: Tags.find()
+            };
 
         },
-        onBeforeAction: function () {
-            Session.setDefault('selectedTag', {_id:'NaN'});
+        onBeforeAction: function() {
+            Session.setDefault('selectedTag', {
+                _id: 'NaN'
+            });
             Session.setDefault('newTag', false);
             this.next();
         }
-       
-
     });
+    this.route('tag_new', {
+        path: '/tags/new',
+        template: 'tagNew',
+        waitOn: function() {
+            return Meteor.subscribe('allTags');
+        },
+        data: function() {
 
+            return {
+                tags: Tags.find()
+            };
+
+        }
+    });
+    this.route('tag', {
+        path: '/tags/:_id',
+        template: 'tag',
+        waitOn: function() {
+            return Meteor.subscribe('singleTag', this.params._id);
+        },
+        data: function() {
+            return Tags.findOne(this.params._id);
+          
+        }
+    });
+    
 
     /*    this.route('tags', {
             path: 'tags/:_id',

@@ -49,7 +49,7 @@ Template.tagList.helpers({
 Template.tagList.events({
     'click .back': function(event, template) {
         //console.log(this);
-        Session.set('newTag',false);
+        Session.set('newTag', false);
         clearForm();
 
     }
@@ -58,16 +58,21 @@ Template.tagList.events({
 
 
 Template.list_desktop.events({
-    'click tbody tr .selectable': function(event, template) { 
-    	//Selecting a row to edit       
-    	Session.set("selectedTag", this);
+    'click tbody tr .selectable': function(event, template) {
+        //Selecting a row to edit       
+        Session.set("selectedTag", this);
     },
     'click tr .toAdd': function(event, template) {
         event.preventDefault();
         //console.log('clicked add');
-        Session.set('newTag',true);
-        clearForm();
-        return false;
+        if (Meteor.Device.isDesktop()) {
+            Session.set('newTag', true);
+            clearForm();
+            return false;
+        } else {
+        	Router.go('tag_new')
+        }
+
 
     },
     'click tr .delete': function(event, template) {

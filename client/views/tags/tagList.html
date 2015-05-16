@@ -4,25 +4,27 @@
             {{> list_desktop}}
         </div>
         <div class="ten wide column">
-            <h2> 
-	    	 <div class="ui labeled icon button back">
-  				<i class="left arrow icon"></i>
-  				Back
-			</div>
-				{{#if creatingNewTag }}
-					New Tag Form
-				{{else}}
-					Edit Tag: {{#with selectedTag}}{{tag}}{{/with}}
-				{{/if}}
-             		
-             </h2> {{> quickForm collection="Tags" doc=selectedTag id="TagForm" type="update"}}
-            <!-- {{#if creatingNewTag }}
-           
-            {{> quickForm collection="Tags" id="insertTagForm" type="insert"}}
-            {{else}} 
-           
-            {{> quickForm collection="Tags" doc=selectedTag id="updateTagForm" type="update"}}
-            {{/if}} -->
+<!--         	Allow editing and creation of tags if on desktop -->
+        	{{#if isDesktop}}
+	            <h2> 
+		    	 <div class="ui labeled icon button back">
+	  				<i class="left arrow icon"></i>
+	  				Back
+				</div>
+					{{#if creatingNewTag }}
+						New Tag Form
+					{{else}}
+						Edit Tag: {{#with selectedTag}}{{tag}}{{/with}}
+					{{/if}}
+	             		
+	             </h2> 
+
+	            {{#if creatingNewTag }}	           
+	            	{{> quickForm collection="Tags" id="TagForm" type="insert"}}
+	            {{else}} 	           
+	            	{{> quickForm collection="Tags" doc=selectedTag id="TagForm" type="update"}}
+	            {{/if}}
+            {{/if}}
         </div>
     </div>
     <!--  {{#each items}}
@@ -30,7 +32,6 @@
     {{/each}} -->
 </template>
 <template name="list_desktop">
-    List for Desktop
     <h2>Tag Configuration.</h2>
     <table class="ui unstackable celled defenition table">
         <thead>
@@ -49,7 +50,13 @@
                         <label></label>
                     </div>
                 </td>
-                <td class="selectable {{#if isSelected _id}}positive{{/if}}">{{tag}}</td>
+                <td class="selectable {{#if isSelected _id}}positive{{/if}}">
+	                {{#if isPhone}}
+	                	<a href="{{pathFor "tag"}}">{{tag}}</a>
+	            	{{else}}
+	            		{{tag}}
+	                {{/if}}               	
+                </td>
                 <td class="selectable {{#if isSelected _id}}positive{{/if}}">{{description}}</td>
             </tr>
             {{/each}}

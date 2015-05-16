@@ -1,11 +1,32 @@
 <template name="tag">
-<ul>
-{{tag}}
-
-</ul>
-
-<!-- {{> quickForm collection="Tags" id="insertTagForm" type="insert"}} -->
-{{selectedTag}}
-<!-- SAME DATA CONTEXT, THIS IS THE PROBLEM -->
-    {{> quickForm collection="Tags" doc="blah" id="updateTagForm" type="update"}}
+    <div class="ui stackable two column grid">
+        <div class="left aligned ten wide column">
+            <h2> 
+                <div class="ui labeled icon button back">                
+                    <i class="left arrow icon"></i>
+                    Back   
+                </div>  
+                        Edit Tag: {{tag}}             
+             </h2> 
+             {{> quickForm collection="Tags" doc=this id="TagForm" type="update"}}
+        </div>
+        <div class="six wide column">
+        </div>
+    </div>
+</template>
+<template name="tagNew">
+    <div class="ui stackable two column grid">
+        <div class="left aligned ten wide column">
+            <h2> 
+                <div class="ui labeled icon button back">                
+                    <i class="left arrow icon"></i>
+                    Back   
+                </div>  
+                        Create New Tag           
+             </h2> 
+            {{> quickForm collection="Tags" id="TagForm" type="insert"}}
+        </div>
+        <div class="six wide column">
+        </div>
+    </div>
 </template>
