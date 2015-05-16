@@ -127,6 +127,7 @@ Router.map(function() {
         },
         onBeforeAction: function () {
             Session.setDefault('selectedTag', {_id:'NaN'});
+            Session.setDefault('newTag', false);
             this.next();
         }
        
