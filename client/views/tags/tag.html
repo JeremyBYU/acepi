@@ -1,11 +1,11 @@
 <template name="tag">
 <ul>
-{{#with tag}}
 {{tag}}
-{{/with}}
 
 </ul>
 
+<!-- {{> quickForm collection="Tags" id="insertTagForm" type="insert"}} -->
+{{selectedTag}}
 <!-- SAME DATA CONTEXT, THIS IS THE PROBLEM -->
-    {{> quickForm collection="Tags" doc=this.tag id="updateTagForm" type="update"}}
+    {{> quickForm collection="Tags" doc="blah" id="updateTagForm" type="update"}}
 </template>

@@ -1,12 +1,21 @@
 <template name="tagList">
-    <h2>Tag Configuration.</h2>
-    <ul>
-        {{#each tags}}
-        <li>{{tag}}</li>
-        {{/each}}
-    </ul>
+    <div class="ui stackable two column grid">
+        <div class="left aligned five wide column">
+            <h2>Tag Configuration.</h2>
+            <ul>
+                {{#each tags}}
+                <li>{{tag}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="ten wide column">
+            {{selectedTag}}
+
+            <!-- SAME DATA CONTEXT, THIS IS THE PROBLEM -->
+            {{> quickForm collection="Tags" doc=selectedTag id="updateTagForm" type="update"}}
+        </div>
+    </div>
     <!--  {{#each items}}
       <li><a href="{{pathFor "item"}}">{{title}}</a></li>
     {{/each}} -->
-
 </template>
