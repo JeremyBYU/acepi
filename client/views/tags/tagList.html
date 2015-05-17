@@ -1,7 +1,7 @@
-<template name="tagList">
+<template name="tagOverview">
     <div class="ui stackable two column grid">
         <div class="left aligned five wide column">
-            {{> list_desktop}}
+            {{> tagTable}}
         </div>
         <div class="ten wide column">
 <!--         	Allow editing and creation of tags if on desktop -->
@@ -20,9 +20,9 @@
 	             </h2> 
 
 	            {{#if creatingNewTag }}	           
-	            	{{> quickForm collection="Tags" id="TagForm" type="insert"}}
+	            	{{> quickForm collection="Tags" id="TagForm" type="method" meteormethod="insertTag" omitFields="markDelete"}}
 	            {{else}} 	           
-	            	{{> quickForm collection="Tags" doc=selectedTag id="TagForm" type="update"}}
+	            	{{> quickForm collection="Tags" doc=selectedTag id="TagForm" type="method-update" meteormethod="updateTag" omitFields="markDelete"}}
 	            {{/if}}
             {{/if}}
         </div>
@@ -31,7 +31,7 @@
       <li><a href="{{pathFor "item"}}">{{title}}</a></li>
     {{/each}} -->
 </template>
-<template name="list_desktop">
+<template name="tagTable">
     <h2>Tag Configuration.</h2>
     <table class="ui unstackable celled defenition table">
         <thead>
@@ -44,10 +44,10 @@
         <tbody>
             {{#each tags}}
             <tr>
-                <td class="collapsing">
-                    <div class="ui fitted slider checkbox">
+                <td class="collapsing {{#if deleteChecked}}negative{{/if}}">
+                    <div class="ui fitted checkbox" id="check_{{tag}}">
                         <input type="checkbox" name="{{tag}}">
-                        <label></label>
+                        <label ></label>
                     </div>
                 </td>
                 <td class="selectable {{#if isSelected _id}}positive{{/if}}">
@@ -64,7 +64,7 @@
         <tfoot class="full-width">
             <tr>
                 <th class="left aligned">
-                    <div class="ui red icon button">
+                    <div class="ui delete red icon button">
                         <i class="remove circle icon"></i>
                     </div>
                 </th>

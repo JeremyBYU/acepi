@@ -99,6 +99,11 @@ Schemas.Tag = new SimpleSchema({
         label: "Address",
         min: 0,
         max: 10000
+    },   
+    markDelete: {
+        type: Boolean,
+        label: 'Delete',
+        defaultValue : false
     }
 });
 

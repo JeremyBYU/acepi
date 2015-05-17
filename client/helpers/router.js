@@ -108,10 +108,10 @@ Router.map(function() {
 
 
       });*/
-
+    //route to show the tag list
     this.route('tags', {
         path: 'tags',
-        template: 'tagList',
+        template: 'tagOverview',
         waitOn: function() {
             return Meteor.subscribe('allTags');
         },
@@ -130,6 +130,7 @@ Router.map(function() {
             this.next();
         }
     });
+    //Route to create new Tags, used for mobile
     this.route('tag_new', {
         path: '/tags/new',
         template: 'tagNew',
@@ -144,6 +145,7 @@ Router.map(function() {
 
         }
     });
+    //Route to edit Tags, used for mobile
     this.route('tag', {
         path: '/tags/:_id',
         template: 'tag',
@@ -155,35 +157,7 @@ Router.map(function() {
           
         }
     });
-    
-
-    /*    this.route('tags', {
-            path: 'tags/:_id',
-            template: 'tagList',
-            layoutTemplate: 'tagsLayout',
-            yieldTemplates:{
-                'tag': {to: 'tag'}
-
-            },
-            waitOn: function() {
-                return [
-                        Meteor.subscribe('singleTag',this.params._id),
-                        Meteor.subscribe('allTags')];
-
-            },
-            data: function() {
-                //console.log(this.params._id);
-                         
-                    
-                    tags: Tags.find()
-                }
-                //console.log(temp.tags);
-                //console.log(temp.tag);
-                return temp;
-            },
-            notFoundTemplate: 'notFound'
-
-        });*/
+        
 
     // Pages
 
