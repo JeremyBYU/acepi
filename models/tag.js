@@ -38,7 +38,7 @@ Tags.allow({
 });
 
 // Methods
-if (Meteor.isServer) {
+/*if (Meteor.isServer) {
     Meteor.methods({
         createTag: function(item) {
             if (can.createItem(Meteor.user()))
@@ -53,12 +53,7 @@ if (Meteor.isServer) {
         }
     });
 
-}
-
-
-
-
-Schemas = {};
+}*/
 
 Schemas.Tag = new SimpleSchema({
     tag: {

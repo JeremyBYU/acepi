@@ -1,3 +1,4 @@
+//Helper Function to initialize delete checkbox state on startup
 
 initializeCheckboxes = function(dataContext) {
     $('.ui.checkbox')
@@ -16,16 +17,14 @@ initializeCheckboxes = function(dataContext) {
 };
 
 
-
+//Called when the document is initially rendred.
 Template.tagOverview.rendered = function() {
     //console.log('Here is my data in the tagOverview rendered view ');
     //console.log(this.data);
     //$('.sortable.table').tablesort();
-
     initializeCheckboxes(this.data);
 
 }
-
 
 Template.tagOverview.helpers({
     selectedTag: function() {

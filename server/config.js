@@ -5,6 +5,10 @@ env_windows = true;
 
 //Contains options for connection options
 connection = {};
+connection.modbus =
+{
+    coilReadLength: 25
+};
 
 connection.options = {
     autostart: true,
@@ -32,7 +36,5 @@ connection.options = {
     	minConnectTime: 2500,
     	maxReconnectTime: 5000
     }
-
-
-
 };
+
