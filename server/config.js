@@ -7,14 +7,15 @@ env_windows = true;
 connection = {};
 connection.modbus =
 {
-    coilReadLength: 25
+    coilReadLength: 25,
+    maxCoilGroups: 5
 };
 
 connection.options = {
     autostart: true,
-
+    coilScanInterval: 5000,
     suppressTransactionErrors: false,
-    retryOnException: true,
+    retryOnException: false,
     maxConcurrentRequests: 1,
     defaultUnit: 1,
     defaultMaxRetries: 3,

@@ -1,13 +1,12 @@
 Read_Coils = new Meteor.Collection("read_coils");
 
-//Create Blank Shema Object
-Schemas = {};
+
 
 Schemas.Read_Coils = new SimpleSchema({
     groupNum: {
         type: Number,
         label: "Group #"
-    },   
+    },
     startAddress: {
         type: Number,
         label: "Start Address"
@@ -19,7 +18,7 @@ Schemas.Read_Coils = new SimpleSchema({
     tags: {
         type: Array,
         label: "Tags",
-        optional: true,       
+        optional: true,
     },
     "tags.$": {
         type: Object,
@@ -30,17 +29,23 @@ Schemas.Read_Coils = new SimpleSchema({
     },
     "tags.$.tag_param": {
         type: String,
-        label: "Tag.Parameter"        
+        label: "Tag.Parameter"
     },
     "tags.$.address": {
         type: Number,
         label: "Address"
-    },   
+    },
     active: {
         type: Boolean,
-        label: 'Active',
-        defaultValue : true
+        label: "Active",
+        defaultValue: true
+    },
+    errorCount: {
+        type: Number,
+        label: "Error Count",
+        defaultValue: 0
     }
+
 });
 
 Read_Coils.attachSchema(Schemas.Read_Coils);

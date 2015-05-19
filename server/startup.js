@@ -1,12 +1,24 @@
 master = {}; //placeholder for master connection, can be serial or tcp/ip
 
+//placeholder for the Meteor Timers
+modbus_timer = {
+    coils: null,
+    holding_regsiter: null
+};
+
+
+//Unfortunate Asynchronous Trickery
+//Meteor runs on a single thread so I have to wrap the asychronous modbus master.on function into a sychronous shell
+asyncMasterOn = function(event, cb) {
+    master.on(event, cb);
+};
+syncMasterOn = Meteor.wrapAsync(asyncMasterOn);
+
 
 Meteor.startup(function() {
-
     configureModbusCollections();
-
     modbus = Meteor.npmRequire('h5.modbus');
-
+    //modbus_timer.coils = Meteor.setInterval(scanCoils,connection.options.coilScanInterval);
 
     if (!env_windows) {
         var SerialPort = Meteor.npmRequire('serialport').SerialPort;
@@ -59,31 +71,49 @@ Meteor.startup(function() {
             defaultMaxRetries: connection.options.defaultMaxRetries,
             defaultTimeout: connection.options.defaultTimeout
         });
-
-
-
     }
 
     //MONGODB Database for current connections
     //TO DO ERROR HANDLING
-    master.on('error', function(err) {
+    syncMasterOn('error', function(err) {
         console.error('[master#error] %s', err.message);
     });
-    master.on('disconnected', function() {
+    syncMasterOn('disconnected', function() {
         console.log('[master#disconnected]');
+
+        //TODO Stop all Timers!
     });
-    master.on('connected', function() {
+
+    //asyncMaster('connected',function(){console.log('test');});
+    syncMasterOn('connected', function() {
+
         console.log('[master#connected]');
+        console.log('Beggining Scanning of Coils')
+        if (modbus_timer.coils == null) {
+            console.log('Creating Coil Timer');
+            modbus_timer.coils = Meteor.setInterval(scanCoils,connection.options.coilScanInterval);
+
+        } else {
+
+
+        }
+
     });
+    /*    master.on('connected', function() {
+            //TODO Begin Scanning
+            console.log('[master#connected]');
+            console.log('Beggining Scanning of Coils')
+            if (modbus_timer.coils == null) {
+                console.log('Creating Coil Timer');
+                //modbus.timer.coils = Meteor.setInterval(scanCoils,connection.options.coilScanInterval);
+
+            } else {
 
 
-    /*var connection = master.getConnection();
+            }
 
-    connection.on('open', function() {
-        console.log('[connection#open]');
-    });*/
-    //TODO test connection
-    //TODO If connection successful begin polling from tag configuration
-    //TODO create Tag Configuration
+        });*/
+
+
 
 })
