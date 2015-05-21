@@ -27,3 +27,13 @@ Meteor.publish('allTags', function() {
 Meteor.publish('singleTag', function(id) {
   return Tags.find(id);
 });
+
+// Publish all LiveTags
+Meteor.publish('allLiveTags', function() {
+  return LiveTags.find();
+});
+
+// Publish a single Tag
+Meteor.publish('singleLiveTag', function(id) {
+  return LiveTags.find(id);
+});

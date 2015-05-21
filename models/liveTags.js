@@ -44,7 +44,14 @@ Schemas.LiveTags = new SimpleSchema({
     	label: 'Live Value',
     	optional: false,
     	defaultValue: 0
-    }    
+    }, 
+    quality: {
+        type: Boolean,
+        label: "Quality",
+        optional: true,
+        defaultValue: true
+
+    }   
 });
 
 LiveTags.attachSchema(Schemas.LiveTags);

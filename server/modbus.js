@@ -114,6 +114,26 @@ configureModbusCoilCollections = function() {
     }
 }
 
+updateLiveTags = function(data, scanGroup) {
+    var startAddress = scanGroup.startAddress;
+    _.each(scanGroup.tags, function(tag) {
+        var index = tag.address - startAddress;
+        var tagName = tag.tag_param;
+        var newValue = data[index];
+        console.log('Updating Tag ' + tagName + ' to value of ' + newValue);
+        LiveTags.update({
+            tag_param: tagName
+        }, {
+            $set: {
+                value: newValue,
+                quality: true
+            }
+        });
+    });
+
+};
+
+
 //cb is an an object containg functions that are callbacks!!!
 AsyncMasterReadCoils = function(coil_address, quantity, cb) {
     master.readCoils(coil_address, quantity, cb)
@@ -127,6 +147,7 @@ reportModbusError = function(scanGroup) {
     var errors = Read_Coils.find({
         'groupNum': scanGroup.groupNum
     }).fetch()[0].errorCount;
+    errors = errors + 1;
     console.log('Scan Group #' + scanGroup.groupNum + ' is reporting an error. They currently have ' + errors + ' errors');
     if (errors > connection.options.defaultMaxRetries) {
         console.log('Exceeded Max Retries, disabling group #', scanGroup.groupNum);
@@ -151,37 +172,14 @@ reportModbusError = function(scanGroup) {
 syncReportModbusError = Meteor.wrapAsync(reportModbusError);
 
 readCoils = function(coil_address, quantity, scanGroup) {
-    /*transaction = SyncMasterReadCoils(coil_address, quantity, {
-        onComplete: function(err, response) {
-            //if an error occurs, could be a timeout
-            if (err) {
-                console.error('Error Message on Complete w/ ScanGroup #:', scanGroup.groupNum)
-                console.error(err.message);
-
-            } else if (response.isException()) {
-                console.log('Got an Exception Message. Scan Group #:', scanGroup.groupNum)
-                console.log(response.toString());
-                Read_Coils.find({
-                    'groupNum': scanGroup.groupNum
-                }).fetch()[0].errorCount;
-                //syncReportModbusError(scanGroup);
-            } else {
-                console.log('Succesfully completed scanning of Scan Group #:', scanGroup.groupNum);
-                console.log(response.getStates().map(Number));
-                //return response.getStates().map(Number);
-            }
-        },
-        onError: function() {
-
-            console.error('Transaction Error? Error on readCoil, not complete! Scan Group #:', scanGroup.groupNum);
-        }
-    });*/
+    //Neccessary Evil for Asychronous Transaction!
     transaction = master.readCoils(coil_address, quantity);
     AsyncTransactionOn = function(event, cb) {
         transaction.on(event, cb)
     };
     SyncTransactionOn = Meteor.wrapAsync(AsyncTransactionOn);
 
+    //End of necssary evil..
     SyncTransactionOn('complete', function(err, response) {
         //if an error occurs, could be a timeout
         if (err) {
@@ -191,12 +189,15 @@ readCoils = function(coil_address, quantity, scanGroup) {
         } else if (response.isException()) {
             console.log('Got an Exception Message. Scan Group #:', scanGroup.groupNum)
             console.log(response.toString());
-
             reportModbusError(scanGroup);
         } else {
             console.log('Succesfully completed scanning of Scan Group #:', scanGroup.groupNum);
-            console.log(response.getStates().map(Number));
-            //return response.getStates().map(Number);
+            //update LiveTags from the response and scanGroup
+            coils = response.getStates().map(Number);
+            updateLiveTags(coils, scanGroup);
+
+            //console.log(response.getStates().map(Number));
+            return response.getStates().map(Number);
         }
     });
 
@@ -214,7 +215,11 @@ readCoils = function(coil_address, quantity, scanGroup) {
 scanCoilGroup = function(scanGroup) {
     //console.log(scanGroup);
     console.log("Scanning Group # ", scanGroup.groupNum);
-    coil_response = readCoils(0, 8, scanGroup);
+    var address = scanGroup.startAddress;
+    var quantity = scanGroup.endAddress - address;
+    console.log("Address and length " + address + '  ' + quantity);
+    coil_response = readCoils(address, quantity, scanGroup);
+    console.log('scan Group response ', coil_response);
     console.log('after read coil of Group', scanGroup.groupNum);
 }
 
@@ -245,15 +250,22 @@ writeServerCoils = function(coil_address, states) {
 
 };
 
+stopAllScanning = function() {
+
+
+
+};
+
 scanCoils = function() {
     console.log('Begin Scanning Coils');
     //TO DO Scanning
 
     //Get all the read coils
-    var readCoils = Read_Coils.find({}).fetch();
+    var readCoils = Read_Coils.find({
+        "active": true
+    }).fetch();
     console.log('readCoils Array:', readCoils)
     _.each(readCoils, scanCoilGroup);
-    //Never EXECUTED!!! WHY
     console.log('After each statement');
 
     //test

@@ -154,10 +154,27 @@ Router.map(function() {
         },
         data: function() {
             return Tags.findOne(this.params._id);
-          
+
         }
     });
-        
+    this.route('liveTags', {
+        path: '/liveTags',
+        template: 'liveTags',
+        waitOn: function() {
+            return Meteor.subscribe('allLiveTags');
+        },
+        data: function() {
+
+            return {
+                liveTags: LiveTags.find()
+            };
+
+        },
+        onBeforeAction: function() {
+            this.next();
+        }
+    });
+
 
     // Pages
 

@@ -13,7 +13,7 @@ Schemas.Read_Coils = new SimpleSchema({
     },
     endAddress: {
         type: Number,
-        label: "Start Address"
+        label: "End Address"
     },
     tags: {
         type: Array,

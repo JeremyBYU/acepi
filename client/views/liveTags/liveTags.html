@@ -1,0 +1,40 @@
+<template name="liveTags">
+    <div class="ui stackable two column grid">
+        <div class="left aligned five wide column">
+            <h2>Live Tag View</h2>
+            <table class="ui unstackable celled defenition table">
+                <thead>
+                    <tr>
+                        <th>Tag</th>
+                        <th>Param</th>
+                        <th>Description</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each liveTags}}
+                    <tr>
+                        <td>
+                            {{onlyTag}}
+                        </td>
+                        <td>
+                            {{onlyParam}}
+                        </td>
+                        <td>
+                            {{description}}
+                        </td>
+                        <td>
+                            {{value}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>               
+            </table>
+        </div>
+        <div class="ten wide column">
+        </div>
+    </div>
+    <!--  {{#each items}}
+      <li><a href="{{pathFor "item"}}">{{title}}</a></li>
+    {{/each}} -->
+</template>
