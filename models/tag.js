@@ -1,20 +1,5 @@
-mytag = 1;
 /*
 This file hold all information for tag configuration.  Alarming should be placed elseware. 
-
-
-===Fields===
-Tag - String
-description - String (null)
-param1 - String 
-param1_table - String (specific type)
-param1_address - (number)
-param2 - String 
-param2_table - String (specific type)
-param2_address - (number)
-param3 - String 
-param3_table - String (specific type)
-param3_address - (number)
 
 
 */

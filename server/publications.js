@@ -33,7 +33,7 @@ Meteor.publish('allLiveTags', function() {
   return LiveTags.find();
 });
 
-// Publish a single Tag
+// Publish a single LiveTag
 Meteor.publish('singleLiveTag', function(id) {
   return LiveTags.find(id);
 });

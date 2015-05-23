@@ -71,43 +71,8 @@ Router.map(function() {
 
     });
 
-    /*  //Tags - Used for configuration for Modbus Tags
-      this.route('tags/:_id', function() {
-          //console.log(this.params._id);
-          //subscription to just a single Tags, param comes from url
-          this.wait(Meteor.subscribe('singleTag', this.params._id));
-          //subscription to all the tags.
-          this.wait(Meteor.subscribe('allTags'));
-          //this is the layout, one main yield region and one 'tag' region
-          this.layout('tagsLayout', {
-              data: function() {
-                  return {
-                      tags: Tags.find()
-                  };
-
-              }
-          });
-          //check to see if subscription is complete
-          if (this.ready()) {
-              //render tagList template to the main yield region
-              this.render('tagList');
-
-              //render tag template to the tag region with the specified data context (single tag)
-              this.render('tag', {
-                  to: 'tag',
-                  data: function() {
-                      //console.log(this.params._id);
-                      //console.log(Tags.findOne(this.params._id));
-                      return Tags.findOne(this.params._id);
-                  }
-              });
-          } else {
-              this.render('loading');
-          }
 
 
-
-      });*/
     //route to show the tag list
     this.route('tags', {
         path: 'tags',
@@ -157,6 +122,7 @@ Router.map(function() {
 
         }
     });
+    //Page that will show all Live Data
     this.route('liveTags', {
         path: '/liveTags',
         template: 'liveTags',
