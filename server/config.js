@@ -14,7 +14,7 @@ connection.modbus =
 connection.options = {
     autostart: true,
     coilScanInterval: 5000,
-    suppressTransactionErrors: false,
+    suppressTransactionErrors: true,
     retryOnException: false,
     maxConcurrentRequests: 1,
     defaultUnit: 1,

@@ -78,10 +78,11 @@ Meteor.startup(function() {
     //TO DO ERROR HANDLING
     syncMasterOn('error', function(err) {
         console.error('[master#error] %s', err.message);
+        stopAllScanning();
     });
     syncMasterOn('disconnected', function() {
         console.log('[master#disconnected]');
-
+        stopAllScanning();
         //TODO Stop all Timers!
     });
 
@@ -90,14 +91,7 @@ Meteor.startup(function() {
 
         console.log('[master#connected]');
         console.log('Beggining Scanning of Coils')
-        if (modbus_timer.coils == null) {
-            console.log('Creating Coil Timer');
-            modbus_timer.coils = Meteor.setInterval(scanCoils,connection.options.coilScanInterval);
-
-        } else {
-
-
-        }
+        startAllScanning();
 
     });
     /*    master.on('connected', function() {

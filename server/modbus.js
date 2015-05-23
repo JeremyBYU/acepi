@@ -174,11 +174,20 @@ syncReportModbusError = Meteor.wrapAsync(reportModbusError);
 readCoils = function(coil_address, quantity, scanGroup) {
     //Neccessary Evil for Asychronous Transaction!
     transaction = master.readCoils(coil_address, quantity);
+    transaction.setMaxRetries(0);
     AsyncTransactionOn = function(event, cb) {
         transaction.on(event, cb)
     };
     SyncTransactionOn = Meteor.wrapAsync(AsyncTransactionOn);
+    SyncTransactionOn('timeout', function() {
+        console.error('[transaction#timeout] Scan Group #:', scanGroup.groupNum);
 
+    });
+    SyncTransactionOn('error', function(err) {
+        console.error('[transaction#error] Scan Group #: ' +  scanGroup.groupNum + '.  Err Msg: '+ err.message);
+        //stopAllScanning();
+
+    });
     //End of necssary evil..
     SyncTransactionOn('complete', function(err, response) {
         //if an error occurs, could be a timeout
@@ -203,11 +212,8 @@ readCoils = function(coil_address, quantity, scanGroup) {
 
 
 
-    /*transaction.on('timeout', function() {
-        console.error('[transaction#timeout] Scan Group #:', scanGroup.groupNum);
 
-    });*/
-    console.log('Inside readCoils at end');
+    //console.log('Inside readCoils at end');
 
 };
 
@@ -251,10 +257,26 @@ writeServerCoils = function(coil_address, states) {
 };
 
 stopAllScanning = function() {
+    console.log('Stopping all scanning');
+    timer = modbus_timer.coils;
+    Meteor.clearInterval(timer);
+    //set timer to null indicating it is no longer active
+    modbus_timer.coils = null;
 
 
 
 };
+startAllScanning = function() {
+    if (modbus_timer.coils == null) {
+        console.log('Creating Coil Timer');
+        modbus_timer.coils = Meteor.setInterval(scanCoils, connection.options.coilScanInterval);
+
+    } else {
+
+
+    }
+
+}
 
 scanCoils = function() {
     console.log('Begin Scanning Coils');
