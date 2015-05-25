@@ -118,6 +118,7 @@ updateLiveTags = function(data, scanGroup) {
     var startAddress = scanGroup.startAddress;
     _.each(scanGroup.tags, function(tag) {
         var index = tag.address - startAddress;
+        //console.log('tag.address: '+ tag.address + ' . startArddress: ' + startAddress);
         var tagName = tag.tag_param;
         var newValue = data[index];
         console.log('Updating Tag ' + tagName + ' to value of ' + newValue);
@@ -203,6 +204,7 @@ readCoils = function(coil_address, quantity, scanGroup) {
             console.log('Succesfully completed scanning of Scan Group #:', scanGroup.groupNum);
             //update LiveTags from the response and scanGroup
             coils = response.getStates().map(Number);
+            console.log('Response: ' +  coils);
             updateLiveTags(coils, scanGroup);
 
             //console.log(response.getStates().map(Number));
@@ -225,7 +227,7 @@ scanCoilGroup = function(scanGroup) {
     var quantity = scanGroup.endAddress - address;
     console.log("Address and length " + address + '  ' + quantity);
     coil_response = readCoils(address, quantity, scanGroup);
-    console.log('scan Group response ', coil_response);
+    //console.log('scan Group response ', coil_response);
     console.log('after read coil of Group', scanGroup.groupNum);
 }
 
