@@ -1,11 +1,19 @@
-Read_Coils = new Meteor.Collection("read_coils");
+ScanGroups = new Meteor.Collection("scangroups");
 
 
 
-Schemas.Read_Coils = new SimpleSchema({
+Schemas.ScanGroups = new SimpleSchema({
     groupNum: {
         type: Number,
         label: "Group #"
+    },
+    table: {
+        type: String,
+        label: "Table",
+        allowedValues: [
+            "Coil",
+            "Holding Register"
+        ]
     },
     startAddress: {
         type: Number,
@@ -48,4 +56,4 @@ Schemas.Read_Coils = new SimpleSchema({
 
 });
 
-Read_Coils.attachSchema(Schemas.Read_Coils);
+ScanGroups.attachSchema(Schemas.ScanGroups);

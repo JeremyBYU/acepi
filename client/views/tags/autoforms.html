@@ -1,0 +1,75 @@
+<template name="quickForm_custom">
+     {{#autoForm this.qfAutoFormContext}}
+        {{> afQuickField name="tag"}}
+        {{> afQuickField name="description"}}
+        {{> afArrayField name="params" template="customArray"}}
+        {{#if qfShouldRenderButton}}
+        <div class="field">
+          <button type="submit" {{submitButtonAtts}}>
+          {{#with ../atts.buttonContent}}
+            {{this}}
+          {{else}}
+            Submit
+          {{/with}}
+          </button>
+        </div>
+      {{/if}}
+    {{/autoForm}}
+
+</template>
+
+
+<template name="afArrayField_customArray">
+
+  <h4 class="ui top attached block header">
+  
+    {{afFieldLabelText name=this.atts.name}}
+  </h4>
+  <div class="ui secondary bottom attached segment">
+    {{#if afFieldIsInvalid name=this.atts.name}}
+      <div class="ui form error">
+        <div class="error message">{{{afFieldMessage name=this.atts.name}}}</div>
+      </div>
+    {{/if}}
+    {{#afEachArrayItem name=this.atts.name minCount=this.atts.minCount maxCount=this.atts.maxCount}}
+      <div class="field autoform-array-item">
+        <div class="ui input">
+          {{#if afArrayFieldHasMoreThanMinimum name=../atts.name minCount=../atts.minCount maxCount=../atts.maxCount}}
+            <div class="ui small red corner label autoform-remove-item">
+              <i class="icon minus"></i>
+            </div>
+          {{/if}}
+         {{> afObjectField name=this.name template='customRemoval'}}   
+        </div>
+      </div>
+    {{/afEachArrayItem}}
+    {{#if afArrayFieldHasLessThanMaximum name=this.atts.name minCount=this.atts.minCount maxCount=this.atts.maxCount}}
+      <div class="field">
+        <div class="ui small green icon button autoform-add-item" data-autoform-field="{{this.atts.name}}" data-autoform-minCount="{{this.atts.minCount}}" data-autoform-maxCount="{{this.atts.maxCount}}">
+          <i class="icon plus"></i>
+        </div>
+      </div>
+    {{/if}}
+  </div>
+
+</template>
+
+<template name="afObjectField_customRemoval">
+    {{#with afFieldLabelText name=this.name}}
+    <h4 class="ui top attached block header">{{this}}</h4>
+    {{/with}}
+    <div class="ui secondary bottom attached segment form error">
+    {{#if afFieldIsInvalid name=this.name}}
+        <div class="error message">{{{afFieldMessage name=this.name}}}</div>
+    {{/if}}
+    {{> afQuickField name=getName}}
+    {{> afQuickField options="allowed" name=getTable}}
+    {{> afQuickField name=getAddress}}
+    {{#if afFieldValueIs name=getTable value="Holding Register"}}
+         {{> afQuickField options="allowed" name=getDataType}}
+    {{/if}}
+    
+   
+  </div>   
+
+</template>

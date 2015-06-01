@@ -79,11 +79,21 @@ Schemas.Tag = new SimpleSchema({
         label: "Address",
         min: 0,
         max: 10000
-    },   
+    },
+    "params.$.dataType": {
+        type: String,
+        label: "Data Type",
+        optional: true,
+        allowedValues: [
+            "Floating Point",
+            "Integer"
+        ],
+        defaultValue: "Floating Point"
+    },
     markDelete: {
         type: Boolean,
         label: 'Delete',
-        defaultValue : false
+        defaultValue: false
     }
 });
 

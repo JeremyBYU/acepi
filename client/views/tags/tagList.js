@@ -10,8 +10,8 @@ initializeCheckboxes = function(dataContext) {
     });
     //console.log(markedTags);
     //check all the marked for delete tags.
-    _.each(markedTags,function(tag){
-        var checkboxID = 'check_' + tag.tag;  
+    _.each(markedTags, function(tag) {
+        var checkboxID = 'check_' + tag.tag;
         $('.ui .checkbox#' + checkboxID).checkbox('check');
     });
 };
@@ -24,7 +24,9 @@ Template.tagOverview.rendered = function() {
     //$('.sortable.table').tablesort();
     initializeCheckboxes(this.data);
 
-}
+};
+
+
 
 Template.tagOverview.helpers({
     selectedTag: function() {
@@ -149,3 +151,4 @@ Template.tagTable.helpers({
 
 
 });
+

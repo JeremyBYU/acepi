@@ -13,12 +13,12 @@ connection.modbus =
 
 connection.options = {
     autostart: true,
-    coilScanInterval: 5000,
+    coilScanInterval: 2000,
     suppressTransactionErrors: true,
     retryOnException: false,
     maxConcurrentRequests: 1,
     defaultUnit: 1,
-    defaultMaxRetries: 3,
+    defaultMaxRetries: 1,
     defaultTimeout: 1000,
 
     rtu:{

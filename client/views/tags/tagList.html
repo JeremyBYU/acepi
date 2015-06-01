@@ -21,8 +21,8 @@
 
 	            {{#if creatingNewTag }}	           
 	            	{{> quickForm collection="Tags" id="TagForm" type="method" meteormethod="insertTag" omitFields="markDelete"}}
-	            {{else}} 	           
-	            	{{> quickForm collection="Tags" doc=selectedTag id="TagForm" type="method-update" meteormethod="updateTag" omitFields="markDelete"}}
+	            {{else}} 	
+                    {{> quickForm template="custom" collection="Tags" doc=selectedTag id="TagForm" type="method-update" meteormethod="updateTag"}}                   
 	            {{/if}}
             {{/if}}
         </div>
@@ -76,3 +76,4 @@
         </tfoot>
     </table>
 </template>
+

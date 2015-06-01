@@ -1,4 +1,9 @@
-x = 1;
+/*
+This file is used to capture all functions and interactions of the modbus slave device
+In addition it holds functions that will initialize mongo collections used for its scanning
+
+
+*/
 
 /*
 Purpose: This will create a replica "live" collection of the Tags collection
@@ -29,7 +34,7 @@ configureLiveTagCollection = function() {
 /*
 Purpose: This will configure all the Modbus Collections
 LiveTags = Replica of Tags but with updated Vaulues
-Read_Coils = Collecton containing scanning groups of Coil Read
+ScanGroups = Collecton containing scanning groups of Coil Read
 Read_HR = Collection of scanning groups of Holding Register Reads
 
 */
@@ -39,7 +44,7 @@ configureModbusCollections = function() {
     configureLiveTagCollection();
 
     //Clear the Read Coil Colleciton
-    Read_Coils.remove({});
+    ScanGroups.remove({});
 
     configureModbusCoilCollections();
 
@@ -86,7 +91,7 @@ configureModbusCoilCollections = function() {
         //console.log('next Range' + next_range);
 
         //Group the coils within the range (true Group) and those without the range.
-        //add the true Group to the Read_Coils table
+        //add the true Group to the ScanGroups table
         //remove the trueGroup from the cleanCoils list
         var group = _.groupBy(cleanCoils, function(tag) {
             //console.log(tag.address);
@@ -99,9 +104,10 @@ configureModbusCoilCollections = function() {
         //console.log('Less Than ',trueGroup);
         //console.log('Not less than',cleanCoils);
 
-        //create Read_Coils document containing the tags within the address range.
-        Read_Coils.insert({
+        //create ScanGroups document containing the tags within the address range.
+        ScanGroups.insert({
             groupNum: i,
+            table: "Coil",
             startAddress: low_address,
             endAddress: next_range,
             tags: trueGroup,
@@ -145,14 +151,14 @@ SyncMasterReadCoils = Meteor.wrapAsync(AsyncMasterReadCoils);
 
 
 reportModbusError = function(scanGroup) {
-    var errors = Read_Coils.find({
+    var errors = ScanGroups.find({
         'groupNum': scanGroup.groupNum
     }).fetch()[0].errorCount;
     errors = errors + 1;
     console.log('Scan Group #' + scanGroup.groupNum + ' is reporting an error. They currently have ' + errors + ' errors');
     if (errors > connection.options.defaultMaxRetries) {
         console.log('Exceeded Max Retries, disabling group #', scanGroup.groupNum);
-        Read_Coils.update({
+        ScanGroups.update({
             groupNum: scanGroup.groupNum
         }, {
             $set: {
@@ -160,7 +166,7 @@ reportModbusError = function(scanGroup) {
             }
         });
     }
-    Read_Coils.update({
+    ScanGroups.update({
         groupNum: scanGroup.groupNum
     }, {
         $inc: {
@@ -185,7 +191,7 @@ readCoils = function(coil_address, quantity, scanGroup) {
 
     });
     SyncTransactionOn('error', function(err) {
-        console.error('[transaction#error] Scan Group #: ' +  scanGroup.groupNum + '.  Err Msg: '+ err.message);
+        console.error('[transaction#error] Scan Group #: ' + scanGroup.groupNum + '.  Err Msg: ' + err.message);
         //stopAllScanning();
 
     });
@@ -204,7 +210,7 @@ readCoils = function(coil_address, quantity, scanGroup) {
             console.log('Succesfully completed scanning of Scan Group #:', scanGroup.groupNum);
             //update LiveTags from the response and scanGroup
             coils = response.getStates().map(Number);
-            console.log('Response: ' +  coils);
+            console.log('Response: ' + coils);
             updateLiveTags(coils, scanGroup);
 
             //console.log(response.getStates().map(Number));
@@ -241,8 +247,8 @@ writeServerCoils = function(coil_address, states) {
         onComplete: function(err, response) {
             //console.log(states);
             if (err) {
-                console.err(err.message);
-                console.err('I make the error here!');
+                console.error(err.message);
+                console.error('I make the error here!');
             } else {
 
                 console.log(response);
@@ -285,11 +291,22 @@ scanCoils = function() {
     //TO DO Scanning
 
     //Get all the read coils
-    var readCoils = Read_Coils.find({
+    var scanGroups = ScanGroups.find({
         "active": true
     }).fetch();
-    console.log('readCoils Array:', readCoils)
-    _.each(readCoils, scanCoilGroup);
+    console.log('scanGroups Array:', scanGroups)
+    _.each(scanGroups, function(myGroup) {
+        switch (myGroup.table) {
+            case "Coil":
+                scanCoilGroup(myGroup);
+                break;
+            case "Holding Register":
+                break;
+            default:
+                console.log("ScanGroup ID: " + scanGroup.groupNum + " has incorrect table Name");
+        }
+        
+    });
     console.log('After each statement');
 
     //test
