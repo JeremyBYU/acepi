@@ -11,7 +11,7 @@ Client-side Router.
 Router.configure({
     layoutTemplate: 'layout',
     loadingTemplate: 'loading',
-    notFoundTemplate: 'notFound',
+    notFoundTemplate: 'notFound'
 });
 
 // Filters
@@ -24,14 +24,14 @@ var filters = {
 
     isLoggedIn: function() {
         if (!(Meteor.loggingIn() || Meteor.user())) {
-            alert('Please Log In First.')
+            alert('Please Log In First.');
             this.stop();
         } else {
             this.next();
         }
     }
 
-}
+};
 
 Router.onBeforeAction(filters.isLoggedIn, {
     only: ['items']
@@ -67,7 +67,7 @@ Router.map(function() {
     });
     //main ace template
     this.route('ace', {
-        path: 'ace',
+        path: 'ace'
 
     });
 
