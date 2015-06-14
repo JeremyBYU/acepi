@@ -33,8 +33,8 @@ configureLiveTagCollection = function() {
 };
 /*
 Purpose: This will configure all the Modbus Collections
-LiveTags = Replica of Tags but with updated Vaulues
-ScanGroups = Collecton containing scanning groups of Coil Read
+LiveTags = Replica of Tags but with updated Values
+ScanGroups = Collection containing scanning groups of Coil Read
 Read_HR = Collection of scanning groups of Holding Register Reads
 
 */
