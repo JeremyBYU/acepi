@@ -1,6 +1,6 @@
 /*
 This file is used to capture all functions and interactions of the modbus slave device
-In addition it holds functions that will initialize mongo collections used for its scanning
+In addition it holds functions that will initialize Mongo collections used for its scanning
 
 
 */
@@ -43,10 +43,11 @@ configureModbusCollections = function() {
     LiveTags.remove({});
     configureLiveTagCollection();
 
-    //Clear the Read Coil Colleciton
+    //Clear the Scan Group Collection
     ScanGroups.remove({});
 
     configureModbusCoilCollections();
+
 
     //TODO  Read_HR.remove({});
     //TODO  configureModbusHoldingRegisterCollections();
@@ -118,7 +119,7 @@ configureModbusCoilCollections = function() {
 
 
     }
-}
+};
 
 updateLiveTags = function(data, scanGroup) {
     var startAddress = scanGroup.startAddress;
@@ -141,7 +142,7 @@ updateLiveTags = function(data, scanGroup) {
 };
 
 
-//cb is an an object containg functions that are callbacks!!!
+//cb is an an object containing functions that are callbacks!!!
 AsyncMasterReadCoils = function(coil_address, quantity, cb) {
     master.readCoils(coil_address, quantity, cb)
 };
@@ -182,7 +183,7 @@ readCoils = function(coil_address, quantity, scanGroup) {
     //Neccessary Evil for Asychronous Transaction!
     transaction = master.readCoils(coil_address, quantity);
     transaction.setMaxRetries(0);
-    AsyncTransactionOn = function(event, cb) {
+    var AsyncTransactionOn = function (event, cb) {
         transaction.on(event, cb)
     };
     SyncTransactionOn = Meteor.wrapAsync(AsyncTransactionOn);
@@ -195,18 +196,19 @@ readCoils = function(coil_address, quantity, scanGroup) {
         //stopAllScanning();
 
     });
-    //End of necssary evil..
     SyncTransactionOn('complete', function(err, response) {
         //if an error occurs, could be a timeout
         if (err) {
             console.error('Error Message on Complete w/ ScanGroup #:', scanGroup.groupNum)
             console.error(err.message);
 
-        } else if (response.isException()) {
+        } else
+        if (response.isException()) {
             console.log('Got an Exception Message. Scan Group #:', scanGroup.groupNum)
             console.log(response.toString());
             reportModbusError(scanGroup);
         } else {
+            var coils;
             console.log('Succesfully completed scanning of Scan Group #:', scanGroup.groupNum);
             //update LiveTags from the response and scanGroup
             coils = response.getStates().map(Number);
@@ -235,7 +237,7 @@ scanCoilGroup = function(scanGroup) {
     coil_response = readCoils(address, quantity, scanGroup);
     //console.log('scan Group response ', coil_response);
     console.log('after read coil of Group', scanGroup.groupNum);
-}
+};
 
 //This function will write coils and handle error messages
 writeServerCoils = function(coil_address, states) {
@@ -266,13 +268,10 @@ writeServerCoils = function(coil_address, states) {
 
 stopAllScanning = function() {
     console.log('Stopping all scanning');
-    timer = modbus_timer.coils;
+    var timer = modbus_timer.coils;
     Meteor.clearInterval(timer);
     //set timer to null indicating it is no longer active
     modbus_timer.coils = null;
-
-
-
 };
 startAllScanning = function() {
     if (modbus_timer.coils == null) {
@@ -280,11 +279,9 @@ startAllScanning = function() {
         modbus_timer.coils = Meteor.setInterval(scanCoils, connection.options.coilScanInterval);
 
     } else {
-
-
+        console.log('Timer already exists..');
     }
-
-}
+};
 
 scanCoils = function() {
     console.log('Begin Scanning Coils');
@@ -294,7 +291,7 @@ scanCoils = function() {
     var scanGroups = ScanGroups.find({
         "active": true
     }).fetch();
-    console.log('scanGroups Array:', scanGroups)
+    console.log('scanGroups Array:', scanGroups);
     _.each(scanGroups, function(myGroup) {
         switch (myGroup.table) {
             case "Coil":
@@ -312,4 +309,4 @@ scanCoils = function() {
     //test
 
 
-}
+};

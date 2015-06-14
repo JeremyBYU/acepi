@@ -8,7 +8,8 @@
                 </div>  
                         Edit Tag: {{tag}}             
              </h2> 
-             {{> quickForm collection="Tags" doc=this id="TagForm" type="update"}}
+             <!--{{> quickForm collection="Tags" doc=this id="TagForm" type="update"}}-->
+            {{> quickForm template="custom" collection="Tags" doc=this id="TagForm" type="method-update" meteormethod="updateTag"}}
         </div>
         <div class="six wide column">
         </div>
@@ -23,8 +24,9 @@
                     Back   
                 </div>  
                         Create New Tag           
-             </h2> 
-            {{> quickForm collection="Tags" id="TagForm" type="insert"}}
+             </h2>
+            {{> quickForm template="custom" collection="Tags" id="TagForm" type="method" meteormethod="insertTag" omitFields="markDelete"}}
+            <!--{{> quickForm collection="Tags" id="TagForm" type="insert"}}-->
         </div>
         <div class="six wide column">
         </div>
