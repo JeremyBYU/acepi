@@ -6,11 +6,15 @@ Custom Handlebars helpers.
 
 /+ ---------------------------------------------------- */
 //Simple function to set Session variable determining if logged in
-Meteor.autorun(function() {
+Tracker.autorun(function() {
+    console.log("AutoRUN!!")
     if(!(!!Meteor.userId() == Session.get("meteor_loggedin"))){
         Session.set("meteor_loggedin", !!Meteor.userId());
-
     }
+    //need to attach sidebar event to new active menu items
+    Meteor.setTimeout(function() {
+        $('.ui.sidebar').sidebar('attach events', '.menu .item', 'slide out',500);
+    },500);
 });
 //Simple Helper to get Session Variables
 Handlebars.registerHelper('myHelper', function(myArgument){
