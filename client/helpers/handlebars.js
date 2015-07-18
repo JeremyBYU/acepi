@@ -7,7 +7,6 @@ Custom Handlebars helpers.
 /+ ---------------------------------------------------- */
 //Simple function to set Session variable determining if logged in
 Tracker.autorun(function() {
-    console.log("AutoRUN!!")
     if(!(!!Meteor.userId() == Session.get("meteor_loggedin"))){
         Session.set("meteor_loggedin", !!Meteor.userId());
     }
