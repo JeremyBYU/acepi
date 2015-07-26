@@ -120,7 +120,78 @@ configureModbusCoilCollections = function() {
 
     }
 };
+configureModbusHoldingRegisterCollections = function(){
+  //make two Scan Groups, one that hold integers and one that holds floating points.
+  //Get a list of all Holding Registers (neeed address, tag_id, tag_param)
+  var allHoldingRegisters = Tags.find({
+      "params.table": "Holding Register"
+  }, {
+      fields: {
+          'tag': 1,
+          'params': 1
+      }
+  }).fetch();
 
+  //New array just containg the Integers and their addesses
+  var cleanIntegers = new Array();
+  _.each(allHoldingRegisters, function(tag) {
+      //console.log(tag);
+      _.each(tag.params, function(param) {
+          if (param.table == "Holding Register") {
+              //Maybe separate floating and integer 
+              var tag_param = tag.tag + '_' + param.name;
+              var new_coil = {
+                  tagid: tag._id,
+                  tag_param: tag_param,
+                  address: param.address
+              };
+              cleanCoils.push(new_coil);
+          }
+
+      });
+  });
+  //console.log(cleanCoils);
+  for (i = 0; i < connection.modbus.maxCoilGroups && cleanCoils.length > 0; i++) {
+      var low_tag = _.min(cleanCoils, function(tag) {
+          //console.log(cleanCoils.address);
+          return tag.address;
+      });
+
+      var low_address = low_tag.address; //Get the lowest address of all the coils
+      var next_range = low_address + connection.modbus.coilReadLength; //create an upper range from the config parameter (default +25)
+      //console.log('next Range' + next_range);
+
+      //Group the coils within the range (true Group) and those without the range.
+      //add the true Group to the ScanGroups table
+      //remove the trueGroup from the cleanCoils list
+      var group = _.groupBy(cleanCoils, function(tag) {
+          //console.log(tag.address);
+          return tag.address <= next_range;
+      });
+
+      trueGroup = group.true;
+      cleanCoils = group.false || [];
+
+      //console.log('Less Than ',trueGroup);
+      //console.log('Not less than',cleanCoils);
+
+      //create ScanGroups document containing the tags within the address range.
+      ScanGroups.insert({
+          groupNum: i,
+          table: "Coil",
+          startAddress: low_address,
+          endAddress: next_range,
+          tags: trueGroup,
+          active: true,
+          errorCount: 0
+      });
+
+
+
+  }
+
+
+};
 updateLiveTags = function(data, scanGroup) {
     var startAddress = scanGroup.startAddress;
     _.each(scanGroup.tags, function(tag) {
@@ -254,7 +325,7 @@ writeServerCoils = function(coil_address, states) {
             } else {
 
                 console.log(response);
-                //console.log(response.exceptionCode);                
+                //console.log(response.exceptionCode);
 
                 //console.log(response.values.readUInt16BE(0));
             }
@@ -302,7 +373,7 @@ scanCoils = function() {
             default:
                 console.log("ScanGroup ID: " + scanGroup.groupNum + " has incorrect table Name");
         }
-        
+
     });
     console.log('After each statement');
 

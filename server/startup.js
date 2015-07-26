@@ -18,7 +18,7 @@ syncMasterOn = Meteor.wrapAsync(asyncMasterOn);
 Meteor.startup(function() {
     modbus = Meteor.npmRequire('h5.modbus');
     configureModbusCollections();
-    
+
     //modbus_timer.coils = Meteor.setInterval(scanCoils,connection.options.coilScanInterval);
 
     if (!env_windows) {

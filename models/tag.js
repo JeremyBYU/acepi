@@ -1,5 +1,5 @@
 /*
-This file hold all information for tag configuration.  Alarming should be placed elseware. 
+This file hold all information for tag configuration.  Alarming should be placed elseware.
 
 
 */

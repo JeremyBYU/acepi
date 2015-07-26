@@ -38,4 +38,3 @@ connection.options = {
     	maxReconnectTime: 5000
     }
 };
-

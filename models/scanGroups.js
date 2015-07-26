@@ -12,7 +12,8 @@ Schemas.ScanGroups = new SimpleSchema({
         label: "Table",
         allowedValues: [
             "Coil",
-            "Holding Register"
+            "Integer",
+            "Floating Point"
         ]
     },
     startAddress: {
