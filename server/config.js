@@ -8,7 +8,9 @@ connection = {};
 connection.modbus =
 {
     coilReadLength: 25,
-    maxCoilGroups: 5
+    holdingRegisterLength: 25,
+    maxCoilGroups: 5,
+    maxHoldingRegisterGroups: 10
 };
 
 connection.options = {

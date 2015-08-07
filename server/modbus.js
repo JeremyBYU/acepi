@@ -50,7 +50,7 @@ configureModbusCollections = function() {
 
 
     //TODO  Read_HR.remove({});
-    //TODO  configureModbusHoldingRegisterCollections();
+    configureModbusHoldingRegisterCollections();
 };
 configureModbusCoilCollections = function() {
     //Get a list of all coils (neeed address, tag_id, tag_param)
@@ -134,43 +134,52 @@ configureModbusHoldingRegisterCollections = function(){
 
   //New array just containg the Integers and their addesses
   var cleanIntegers = new Array();
+  //New array just containing the Floating Points and their addresses.
+  var cleanFloats = new Array();
   _.each(allHoldingRegisters, function(tag) {
       //console.log(tag);
       _.each(tag.params, function(param) {
           if (param.table == "Holding Register") {
-              //Maybe separate floating and integer 
+              //Maybe separate floating and integer
               var tag_param = tag.tag + '_' + param.name;
-              var new_coil = {
+              var new_number = {
                   tagid: tag._id,
                   tag_param: tag_param,
                   address: param.address
               };
-              cleanCoils.push(new_coil);
+              if(param.dataType == "Integer"){
+                  cleanIntegers.push(new_number);
+              }
+              else if(param.dataType == "Floating Point") {
+                  cleanFloats.push(new_number);
+              }
           }
 
       });
   });
+
+  //refractor all of this into a method to be shared....
   //console.log(cleanCoils);
-  for (i = 0; i < connection.modbus.maxCoilGroups && cleanCoils.length > 0; i++) {
-      var low_tag = _.min(cleanCoils, function(tag) {
+  for (i = 0; i < connection.modbus.maxHoldingRegisterGroups && cleanIntegers.length > 0; i++) {
+      var low_tag = _.min(cleanIntegers, function(tag) {
           //console.log(cleanCoils.address);
           return tag.address;
       });
 
       var low_address = low_tag.address; //Get the lowest address of all the coils
-      var next_range = low_address + connection.modbus.coilReadLength; //create an upper range from the config parameter (default +25)
+      var next_range = low_address + connection.modbus.holdingRegisterLength; //create an upper range from the config parameter (default +25)
       //console.log('next Range' + next_range);
 
-      //Group the coils within the range (true Group) and those without the range.
+      //Group the Integers within the range (true Group) and those without the range.
       //add the true Group to the ScanGroups table
       //remove the trueGroup from the cleanCoils list
-      var group = _.groupBy(cleanCoils, function(tag) {
+      var group = _.groupBy(cleanIntegers, function(tag) {
           //console.log(tag.address);
           return tag.address <= next_range;
       });
 
       trueGroup = group.true;
-      cleanCoils = group.false || [];
+      cleanIntegers = group.false || [];
 
       //console.log('Less Than ',trueGroup);
       //console.log('Not less than',cleanCoils);
@@ -178,17 +187,53 @@ configureModbusHoldingRegisterCollections = function(){
       //create ScanGroups document containing the tags within the address range.
       ScanGroups.insert({
           groupNum: i,
-          table: "Coil",
+          table: "Integer",
           startAddress: low_address,
           endAddress: next_range,
           tags: trueGroup,
           active: true,
           errorCount: 0
       });
-
-
-
   }
+};
+createScanGroups = function(type,list,groupLength,maxGroups){
+    for (i = 0; i < maxGroups && list.length > 0; i++) {
+        var low_tag = _.min(list, function(tag) {
+            //console.log(cleanCoils.address);
+            return tag.address;
+        });
+
+        var low_address = low_tag.address; //Get the lowest address of all the coils
+        var next_range = low_address + connection.modbus.holdingRegisterLength; //create an upper range from the config parameter (default +25)
+        //console.log('next Range' + next_range);
+
+        //Group the Integers within the range (true Group) and those without the range.
+        //add the true Group to the ScanGroups table
+        //remove the trueGroup from the cleanCoils list
+        var group = _.groupBy(list, function(tag) {
+            //console.log(tag.address);
+            return tag.address <= next_range;
+        });
+
+        trueGroup = group.true;
+        list = group.false || [];
+
+        //console.log('Less Than ',trueGroup);
+        //console.log('Not less than',cleanCoils);
+
+        //create ScanGroups document containing the tags within the address range.
+        ScanGroups.insert({
+            groupNum: i,
+            table: "Integer",
+            startAddress: low_address,
+            endAddress: next_range,
+            tags: trueGroup,
+            active: true,
+            errorCount: 0
+        });
+    }
+  };
+
 
 
 };
