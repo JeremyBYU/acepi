@@ -236,7 +236,7 @@ createScanGroups = function(type,list,groupLength,maxGroups){
 
 
 
-};
+
 updateLiveTags = function(data, scanGroup) {
     var startAddress = scanGroup.startAddress;
     _.each(scanGroup.tags, function(tag) {
