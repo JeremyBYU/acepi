@@ -392,15 +392,15 @@ stopAllScanning = function() {
 startAllScanning = function() {
     if (modbus_timer.coils == null) {
         console.log('Creating Coil Timer');
-        modbus_timer.coils = Meteor.setInterval(scanCoils, connection.options.coilScanInterval);
+        modbus_timer.coils = Meteor.setInterval(scanAllGroups, connection.options.coilScanInterval);
 
     } else {
         console.log('Timer already exists..');
     }
 };
 
-scanCoils = function() {
-    console.log('Begin Scanning Coils');
+scanAllGroups = function() {
+    console.log('Begin Scanning Groups');
     //TO DO Scanning
 
     //Get all the read coils
@@ -413,10 +413,13 @@ scanCoils = function() {
             case "Coil":
                 scanCoilGroup(myGroup);
                 break;
-            case "Holding Register":
+            case "Integer":
+                //scanIntegerGroup(myGroup);
+                break;
+            case "Floating Point":
                 break;
             default:
-                console.log("ScanGroup ID: " + scanGroup.groupNum + " has incorrect table Name");
+                console.log("ScanGroup ID: " + myGroup.groupNum + " has incorrect table Name");
         }
 
     });
