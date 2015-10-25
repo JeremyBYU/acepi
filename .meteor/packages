@@ -11,10 +11,13 @@ accounts-ui
 meteorhacks:npm
 
 
-npm-container
 semantic:ui-css
 aldeed:collection2
 aldeed:autoform
 fabienb4:autoform-semantic-ui
 msavin:mongol
 mystor:device-detection
+
+
+npm-container
+standard-minifiers
